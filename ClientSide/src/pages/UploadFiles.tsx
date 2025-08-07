@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect ,useMemo} from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 
 type UserType = {
   id: number;
@@ -9,64 +9,61 @@ type UserType = {
   credits?: number;
 };
 
-function UploadFiles({ userval}: { userval: string | null }) {
-  const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [existingFiles, setExistingFiles] = useState([]);
+interface UploadedFile {
+  id: number;
+  name: string;
+  size: string;
+  type: string;
+  file: File;
+  progress: number;
+  status: 'pending' | 'uploading' | 'completed' | 'error';
+  cloudinaryUrl?: string;
+}
+
+interface ExistingFile {
+  id: number;
+  user_id: number;
+  name: string;
+  original_name: string;
+  cloudinary_url: string;
+  size: number;
+  mime_type: string;
+  created_at: number;
+}
+
+function UploadFiles({ userval }: { userval: string | null }) {
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [existingFiles, setExistingFiles] = useState<ExistingFile[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [currentCredits, setCurrentCredits] = useState<number>(0);
 
-
-    const parsedUser = useMemo<UserType | null>(() => {
-        if (!userval) return null;
-        try {
-          return JSON.parse(userval);
-        } catch {
-          return null;
-        }
-      }, [userval]);
-  
-  // Mock user ID - in real app, get this from auth context
-  // const userId = 1;
-
-  interface UploadedFile {
-    id: number;
-    name: string;
-    size: string;
-    type: string;
-    file: File;
-    progress: number;
-    status: 'pending' | 'uploading' | 'completed' | 'error';
-    cloudinaryUrl?: string;
-  }
-
-  interface ExistingFile {
-    id: number;
-    user_id: number;
-    name: string;
-    original_name: string;
-    cloudinary_url: string;
-    size: number;
-    mime_type: string;
-    created_at: number;
-  }
-
-  // Fetch existing files when component mounts
+  const parsedUser = useMemo<UserType | null>(() => {
+    if (!userval) return null;
+    try {
+      return JSON.parse(userval);
+    } catch {
+      return null;
+    }
+  }, [userval]);
   useEffect(() => {
-    fetchExistingFiles();
-        if (parsedUser) {
+    if (parsedUser?.id) {
+      fetchExistingFiles();
       fetchUserCredits();
-      
-      // Set up interval to fetch credits every 30 seconds
-      const interval = setInterval(fetchUserCredits, 30000);
+      const interval = setInterval(fetchUserCredits, 5000);
       return () => clearInterval(interval);
     }
-  }, []);
+  }, [parsedUser]);
 
   const fetchExistingFiles = async () => {
     try {
+      if (!parsedUser?.id) {
+        setError('User not authenticated');
+        return;
+      }
+
       setLoading(true);
       const response = await fetch(`http://localhost:8080/user/${parsedUser.id}/files?page=1&limit=50`);
       const data = await response.json();
@@ -77,28 +74,34 @@ function UploadFiles({ userval}: { userval: string | null }) {
         setError('Failed to fetch existing files');
       }
     } catch (err) {
-      setError('Error fetching files: ' + err.message);
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError('Error fetching files: ' + errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
   const fetchUserCredits = async () => {
-    if (!parsedUser) return;
+    if (!parsedUser?.id) return;
       
-      try {
-        const response = await fetch(`http://localhost:8080/user/${parsedUser.id}/credits`);
-        if (response.ok) {
-          const data = await response.json();
-          const newCredits = data.credits || 0;
-          setCurrentCredits(newCredits);
-        }
-      } catch (error) {
-        console.error('Failed to fetch user credits:', error);
+    try {
+      console.log('Fetching user credits for ID:', parsedUser.id);
+      const response = await fetch(`http://localhost:8080/user/${parsedUser.id}/credits`);
+      if (response.ok) {
+        const data = await response.json();
+        const newCredits = data.credits || 0;
+        setCurrentCredits(newCredits);
       }
-    };
+    } catch (error) {
+      console.error('Failed to fetch user credits:', error);
+    }
+  };
 
   const uploadFileToServer = async (file: File, fileId: number) => {
+    if (!parsedUser?.id) {
+      throw new Error('User not authenticated');
+    }
+
     const formData = new FormData();
     formData.append('file', file);
 
@@ -157,7 +160,9 @@ function UploadFiles({ userval}: { userval: string | null }) {
     }
   };
 
-  const handleFileSelect = async (files: FileList | File[]) => {
+  const handleFileSelect = async (files: FileList | File[] | null) => {
+    if (!files) return;
+
     const fileArray: File[] = Array.from(files);
     const newFiles: File[] = fileArray.slice(0, remainingFiles);
     
@@ -202,6 +207,11 @@ function UploadFiles({ userval}: { userval: string | null }) {
     if (!confirm('Are you sure you want to delete this file?')) return;
 
     try {
+      if (!parsedUser?.id) {
+        setError('User not authenticated');
+        return;
+      }
+
       const response = await fetch(`http://localhost:8080/user/${parsedUser.id}/files/${fileId}`, {
         method: 'DELETE',
       });
@@ -214,7 +224,8 @@ function UploadFiles({ userval}: { userval: string | null }) {
         setError('Failed to delete file');
       }
     } catch (error) {
-      setError('Error deleting file: ' + error.message);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      setError('Error deleting file: ' + errorMessage);
     }
   };
 
@@ -255,9 +266,23 @@ function UploadFiles({ userval}: { userval: string | null }) {
     return new Date(timestamp * 1000).toLocaleDateString();
   };
 
-    
+  // Add early return for unauthenticated user
+  if (!parsedUser?.id) {
+    return (
+      <div className="p-6">
+        <div className="flex items-center justify-center min-h-96">
+          <div className="text-center">
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">Authentication Required</h2>
+            <p className="text-gray-600">Please log in to upload files.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const maxFiles = currentCredits;
-  const remainingFiles = maxFiles - uploadedFiles.length;
+  const remainingFiles = Math.max(0, maxFiles - uploadedFiles.length);
+
   console.log('====================================');
   console.log(parsedUser.id);
   console.log('====================================');

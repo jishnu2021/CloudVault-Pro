@@ -1,16 +1,30 @@
 {
   "compilerOptions": {
-      "lib": ["dom", "es2015"],
-      "outDir": "./lib/cjs/",
-      "sourceMap": true,
-      "declaration": true,
-      "noImplicitAny": true,
-      "module": "commonjs",
-      "target": "es5",
-      "allowJs": true,
-      "moduleResolution": "node",
-      "jsx": "react-jsx"
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Interop */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*.ts*"],
-  "exclude": ["node_modules", "dist", "lib"]
+  "include": ["src"]
 }

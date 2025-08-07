@@ -7,6 +7,7 @@ import (
     "github.com/gorilla/handlers"
     "github.com/jishnu21/pkg/routes"
     "github.com/jishnu21/pkg/controllers"
+    "os"
     
 )
 
@@ -34,7 +35,12 @@ func main() {
         handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}),
         handlers.AllowCredentials(),
     )(router)
+
+    port := os.Getenv("PORT")
+    if port == "" {
+    port = "8080" // fallback for local dev
+    }
     
-    log.Println("Server starting on :8080")
-    log.Fatal(http.ListenAndServe(":8080", corsHandler))
+    log.Printf("Server starting on :%s\n", port)
+    log.Fatal(http.ListenAndServe(":"+port, corsHandler))
 }

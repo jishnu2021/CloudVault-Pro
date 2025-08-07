@@ -41,7 +41,6 @@ function Transactions({ userval }: { userval: string | null }) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentCredits, setCurrentCredits] = useState<number>(0);
   const [pagination, setPagination] = useState<PaginationState>({
     total: 0,
     limit: 10,
@@ -49,8 +48,6 @@ function Transactions({ userval }: { userval: string | null }) {
   });
   const [selectedTransactions, setSelectedTransactions] = useState<Set<number>>(new Set());
 
-  // Get user ID - you might get this from context, props, or auth
-  // const userId = 1; // Replace with actual user ID from your auth system
   const parsedUser = useMemo<UserType | null>(() => {
         if (!userval) return null;
         try {
@@ -61,10 +58,15 @@ function Transactions({ userval }: { userval: string | null }) {
       }, [userval]);
 
   useEffect(() => {
+     if (parsedUser) {
+      console.log(parsedUser.id);
+    }
+
     fetchTransactions();
   }, [pagination.offset, pagination.limit]);
 
   const fetchTransactions = async (): Promise<void> => {
+    if (!parsedUser) return;
     try {
       setLoading(true);
       const response = await fetch(
@@ -77,7 +79,6 @@ function Transactions({ userval }: { userval: string | null }) {
       
       const data: TransactionsResponse = await response.json();
       setTransactions(data.transactions || []);
-      setCurrentCredits(data.current_credits || 0);
       setPagination(prev => ({
         ...prev,
         total: data.total || 0

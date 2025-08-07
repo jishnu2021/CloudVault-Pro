@@ -1,4 +1,4 @@
-import { useState, useEffect ,useMemo} from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 interface DashboardHomeProps {
   setCurrentPage: (page: string) => void;
@@ -60,8 +60,10 @@ function DashboardHome({ setCurrentPage }: DashboardHomeProps) {
   }, [uservalue]);
 
   useEffect(() => {
-    fetchFiles();
-  }, []);
+    if (parsedUser?.id) {
+      fetchFiles();
+    }
+  }, [parsedUser]);
 
   useEffect(() => {
     calculateStats();
@@ -69,6 +71,13 @@ function DashboardHome({ setCurrentPage }: DashboardHomeProps) {
 
   const fetchFiles = async () => {
     try {
+      // Add null check for parsedUser
+      if (!parsedUser?.id) {
+        setError('User not authenticated');
+        setLoading(false);
+        return;
+      }
+
       setLoading(true);
       const response = await fetch(`http://localhost:8080/user/${parsedUser.id}/files?page=1&limit=100`);
       const data = await response.json();
@@ -186,6 +195,12 @@ function DashboardHome({ setCurrentPage }: DashboardHomeProps) {
     if (!confirm('Are you sure you want to delete this file?')) return;
 
     try {
+      // Add null check for parsedUser
+      if (!parsedUser?.id) {
+        setError('User not authenticated');
+        return;
+      }
+
       const response = await fetch(`http://localhost:8080/user/${parsedUser.id}/files/${fileId}`, {
         method: 'DELETE',
       });
@@ -206,6 +221,20 @@ function DashboardHome({ setCurrentPage }: DashboardHomeProps) {
     navigator.clipboard.writeText(url);
     // You could show a toast notification here
   };
+
+  // Add early return for unauthenticated user
+  if (!parsedUser) {
+    return (
+      <div className="p-6">
+        <div className="flex items-center justify-center min-h-96">
+          <div className="text-center">
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">Authentication Required</h2>
+            <p className="text-gray-600">Please log in to view your files.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

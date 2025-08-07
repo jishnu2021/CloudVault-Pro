@@ -1,31 +1,22 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import DashboardHome from '../pages/DashboardHome';
 import UploadFiles from '../pages/UploadFiles';
 import Transactions from '../pages/Transaction';
 import Subscription from '../pages/Subscription';
 
-type UserType = {
-  id: number;
-  name: string;
-  email: string;
-  image?: string;
-  bio?: string;
-  credits?: number;
-  // other fields omitted for brevity
-};
 
 function Dashboard({ user }: { user: string | null }) {
   const [currentPage, setCurrentPage] = useState('dashboard');
 
   // parse once, memoize to avoid repeated JSON.parse on rerenders
-  const parsedUser = useMemo<UserType | null>(() => {
-    if (!user) return null;
-    try {
-      return JSON.parse(user);
-    } catch {
-      return null;
-    }
-  }, [user]);
+  // const parsedUser = useMemo<UserType | null>(() => {
+  //   if (!user) return null;
+  //   try {
+  //     return JSON.parse(user);
+  //   } catch {
+  //     return null;
+  //   }
+  // }, [user]);
 
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: '🏠' },

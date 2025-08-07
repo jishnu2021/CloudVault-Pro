@@ -49,7 +49,11 @@ function Subscription({ userdata }: { userdata: string | null }) {
 
   // Load Razorpay script
   useEffect(() => {
-    console.log(parsedUser.id)
+    // Fix: Add null check for parsedUser
+    if (parsedUser) {
+      console.log(parsedUser.id);
+    }
+    
     const loadRazorpayScript = () => {
       return new Promise((resolve) => {
         if (window.Razorpay) {
@@ -65,7 +69,7 @@ function Subscription({ userdata }: { userdata: string | null }) {
     };
 
     loadRazorpayScript();
-  }, []);
+  }, [parsedUser]); // Add parsedUser to dependency array
 
   // Fetch subscription plans
   useEffect(() => {

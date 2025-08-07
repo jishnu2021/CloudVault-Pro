@@ -91,17 +91,17 @@ const NavbarPage = ({ userdata }: { userdata: string | null }) => {
   }, [parsedUser]);
 
   // Function to get initials from name
-  interface User {
-    name: string;
-    email: string;
-    password?: string;
-    phone?: string;
-    bio?: string;
-    photo?: string;
-    image?: string;
-    credits?: number;
-    [key: string]: any;
-  }
+  // interface User {
+  //   name: string;
+  //   email: string;
+  //   password?: string;
+  //   phone?: string;
+  //   bio?: string;
+  //   photo?: string;
+  //   image?: string;
+  //   credits?: number;
+  //   [key: string]: any;
+  // }
 
   interface EditedData {
     name?: string;
