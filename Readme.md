@@ -2,7 +2,8 @@
 
 <div align="center">
 
-![CloudVault Pro Logo](./assets/CloudVaultPro.png)
+![CloudVault Pro Logo](https://raw.githubusercontent.com/jishnu2021/CloudVault-Pro/main/assets/cloudvault.png)
+
 
 **A modern, secure file sharing platform with credit-based subscription system**
 
