@@ -90,7 +90,7 @@ function DashboardHome(_a) {
                 case 0:
                     _a.trys.push([0, 3, 4, 5]);
                     setLoading(true);
-                    return [4 /*yield*/, fetch("https://cloudvault-pro.onrender.com/user/".concat(parsedUser.id, "/files?page=1&limit=100"))];
+                    return [4 /*yield*/, fetch("https://cloudvault-pro.onrender.com/api/user/".concat(parsedUser.id, "/files?page=1&limit=100"))];
                 case 1:
                     response = _a.sent();
                     return [4 /*yield*/, response.json()];
@@ -232,7 +232,7 @@ function DashboardHome(_a) {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 4, , 5]);
-                    return [4 /*yield*/, fetch("https://cloudvault-pro.onrender.com/user/".concat(parsedUser.id, "/files/").concat(fileId), {
+                    return [4 /*yield*/, fetch("https://cloudvault-pro.onrender.com/api/user/".concat(parsedUser.id, "/files/").concat(fileId), {
                             method: 'DELETE',
                         })];
                 case 2:

@@ -105,7 +105,7 @@ var NavbarPage = function (_a) {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 5, , 6]);
-                        return [4 /*yield*/, fetch("https://cloudvault-pro.onrender.com/user/".concat(parsedUser.id, "/credits"))];
+                        return [4 /*yield*/, fetch("https://cloudvault-pro.onrender.com/api/user/".concat(parsedUser.id, "/credits"))];
                     case 2:
                         response = _a.sent();
                         if (!response.ok) return [3 /*break*/, 4];
@@ -173,7 +173,7 @@ var NavbarPage = function (_a) {
             switch (_b.label) {
                 case 0:
                     _b.trys.push([0, 6, , 7]);
-                    return [4 /*yield*/, fetch("https://cloudvault-pro.onrender.com/login", {
+                    return [4 /*yield*/, fetch("https://cloudvault-pro.onrender.com/api/login", {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -216,7 +216,7 @@ var NavbarPage = function (_a) {
             switch (_b.label) {
                 case 0:
                     _b.trys.push([0, 6, , 7]);
-                    return [4 /*yield*/, fetch('https://cloudvault-pro.onrender.com/register', {
+                    return [4 /*yield*/, fetch('https://cloudvault-pro.onrender.com/api/register', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -313,7 +313,7 @@ var NavbarPage = function (_a) {
                     if (!parsedUser)
                         return [2 /*return*/];
                     console.log('Saving profile with data:', editedData); // Debug log
-                    return [4 /*yield*/, fetch("https://cloudvault-pro.onrender.com/user/".concat(parsedUser.id, "/profile"), {
+                    return [4 /*yield*/, fetch("https://cloudvault-pro.onrender.com/api/user/".concat(parsedUser.id, "/profile"), {
                             method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json',

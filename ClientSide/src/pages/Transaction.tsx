@@ -70,7 +70,7 @@ function Transactions({ userval }: { userval: string | null }) {
     try {
       setLoading(true);
       const response = await fetch(
-        `https://cloudvault-pro.onrender.com/user/${parsedUser.id}/transactions?limit=${pagination.limit}&offset=${pagination.offset}`
+        `https://cloudvault-pro.onrender.com/api/user/${parsedUser.id}/transactions?limit=${pagination.limit}&offset=${pagination.offset}`
       );
       
       if (!response.ok) {

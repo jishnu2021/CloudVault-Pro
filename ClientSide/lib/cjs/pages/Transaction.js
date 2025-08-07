@@ -93,7 +93,7 @@ function Transactions(_a) {
                 case 0:
                     _a.trys.push([0, 3, 4, 5]);
                     setLoading(true);
-                    return [4 /*yield*/, fetch("https://cloudvault-pro.onrender.com/user/".concat(parsedUser.id, "/transactions?limit=").concat(pagination.limit, "&offset=").concat(pagination.offset))];
+                    return [4 /*yield*/, fetch("https://cloudvault-pro.onrender.com/api/user/".concat(parsedUser.id, "/transactions?limit=").concat(pagination.limit, "&offset=").concat(pagination.offset))];
                 case 1:
                     response = _a.sent();
                     if (!response.ok) {

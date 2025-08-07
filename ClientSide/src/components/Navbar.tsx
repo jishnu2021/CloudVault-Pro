@@ -60,7 +60,7 @@ const NavbarPage = ({ userdata }: { userdata: string | null }) => {
       if (!parsedUser) return;
       
       try {
-        const response = await fetch(`https://cloudvault-pro.onrender.com/user/${parsedUser.id}/credits`);
+        const response = await fetch(`https://cloudvault-pro.onrender.com/api/user/${parsedUser.id}/credits`);
         if (response.ok) {
           const data = await response.json();
           const newCredits = data.credits || 0;
@@ -148,7 +148,7 @@ const NavbarPage = ({ userdata }: { userdata: string | null }) => {
   // Handle Login
   const handleLogin = async () => {
     try {
-      const response = await fetch(`https://cloudvault-pro.onrender.com/login`, {
+      const response = await fetch(`https://cloudvault-pro.onrender.com/api/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -177,7 +177,7 @@ const NavbarPage = ({ userdata }: { userdata: string | null }) => {
   // Handle Register
   const handleRegister = async () => {
     try {
-      const response = await fetch('https://cloudvault-pro.onrender.com/register', {
+      const response = await fetch('https://cloudvault-pro.onrender.com/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -273,7 +273,7 @@ const NavbarPage = ({ userdata }: { userdata: string | null }) => {
       
       console.log('Saving profile with data:', editedData); // Debug log
       
-      const response = await fetch(`https://cloudvault-pro.onrender.com/user/${parsedUser.id}/profile`, {
+      const response = await fetch(`https://cloudvault-pro.onrender.com/api/user/${parsedUser.id}/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
