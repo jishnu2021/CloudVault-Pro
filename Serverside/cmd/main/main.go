@@ -29,12 +29,16 @@ func main() {
     routes.UserRoutes(router)
     
     // Configure CORS
-    corsHandler := handlers.CORS(
-        handlers.AllowedOrigins([]string{"http://localhost:5173"}), // Your frontend URL
-        handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
-        handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}),
-        handlers.AllowCredentials(),
-    )(router)
+corsHandler := handlers.CORS(
+    handlers.AllowedOrigins([]string{
+        "http://localhost:5173",
+        "https://cloud-vault-ivqlicnch-jishnu2021s-projects.vercel.app", 
+    }),
+    handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
+    handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}),
+    handlers.AllowCredentials(),
+)(router)
+
 
     port := os.Getenv("PORT")
     if port == "" {
