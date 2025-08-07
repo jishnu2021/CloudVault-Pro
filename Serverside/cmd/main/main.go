@@ -32,7 +32,7 @@ func main() {
 corsHandler := handlers.CORS(
     handlers.AllowedOrigins([]string{
         "http://localhost:5173",
-        "https://cloud-vault-ivqlicnch-jishnu2021s-projects.vercel.app", 
+        "https://cloud-vault-pro.vercel.app", // ✅ your live frontend
     }),
     handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
     handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}),
