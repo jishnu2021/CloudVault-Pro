@@ -151,7 +151,7 @@ RAZORPAY_KEY_SECRET=your_key_secret
 
 # Server Configuration
 PORT=8080
-FRONTEND_URL=http://localhost:3000
+FRONTEND_URL=http://localhost:5173
 
 # File Upload Configuration
 MAX_FILE_SIZE=50MB
@@ -199,29 +199,7 @@ DELETE /files/{id}
 GET /user/{id}/files
 ```
 
-### Example API Usage
 
-#### Create Subscription Order
-```javascript
-const response = await fetch('/user/1/subscription/create-order', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ plan_type: 'plan_500' })
-});
-```
-
-#### Verify Payment
-```javascript
-const response = await fetch('/user/1/subscription/verify-payment', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    razorpay_order_id: 'order_xyz',
-    razorpay_payment_id: 'pay_abc',
-    razorpay_signature: 'signature_hash'
-  })
-});
-```
 
 ## 🎯 Usage
 
@@ -295,38 +273,7 @@ We welcome contributions to CloudVault Pro! Here's how you can help:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-```
-MIT License
 
-Copyright (c) 2024 CloudVault Pro
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
-
-## 🙋‍♂️ Support
-
-Need help? Here are your options:
-
-- 📧 **Email Support**: support@cloudvaultpro.com
-- 💬 **Discord Community**: [Join our Discord](https://discord.gg/cloudvaultpro)
-- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/yourusername/cloudvault-pro/issues)
-- 📖 **Documentation**: [Full Documentation](https://docs.cloudvaultpro.com)
 
 ## 🎉 Acknowledgments
 
@@ -339,8 +286,6 @@ Need help? Here are your options:
 
 <div align="center">
 
-**Built with ❤️ by the CloudVault Pro team**
 
-[Website](https://cloudvaultpro.com) • [Documentation](https://docs.cloudvaultpro.com) • [Support](mailto:support@cloudvaultpro.com)
 
 </div>
