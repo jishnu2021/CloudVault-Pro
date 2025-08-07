@@ -65,7 +65,7 @@ function UploadFiles({ userval }: { userval: string | null }) {
       }
 
       setLoading(true);
-      const response = await fetch(`http://localhost:8080/user/${parsedUser.id}/files?page=1&limit=50`);
+      const response = await fetch(`https://cloudvault-pro.onrender.com/user/${parsedUser.id}/files?page=1&limit=50`);
       const data = await response.json();
       
       if (data.success) {
@@ -86,7 +86,7 @@ function UploadFiles({ userval }: { userval: string | null }) {
       
     try {
       console.log('Fetching user credits for ID:', parsedUser.id);
-      const response = await fetch(`http://localhost:8080/user/${parsedUser.id}/credits`);
+      const response = await fetch(`https://cloudvault-pro.onrender.com/user/${parsedUser.id}/credits`);
       if (response.ok) {
         const data = await response.json();
         const newCredits = data.credits || 0;
@@ -149,7 +149,7 @@ function UploadFiles({ userval }: { userval: string | null }) {
           reject(new Error('Network error'));
         });
 
-        xhr.open('POST', `http://localhost:8080/user/${parsedUser.id}/upload`);
+        xhr.open('POST', `https://cloudvault-pro.onrender.com/user/${parsedUser.id}/upload`);
         xhr.send(formData);
       });
     } catch (error) {
@@ -212,7 +212,7 @@ function UploadFiles({ userval }: { userval: string | null }) {
         return;
       }
 
-      const response = await fetch(`http://localhost:8080/user/${parsedUser.id}/files/${fileId}`, {
+      const response = await fetch(`https://cloudvault-pro.onrender.com/user/${parsedUser.id}/files/${fileId}`, {
         method: 'DELETE',
       });
       

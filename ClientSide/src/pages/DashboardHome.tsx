@@ -79,7 +79,7 @@ function DashboardHome({ setCurrentPage }: DashboardHomeProps) {
       }
 
       setLoading(true);
-      const response = await fetch(`http://localhost:8080/user/${parsedUser.id}/files?page=1&limit=100`);
+      const response = await fetch(`https://cloudvault-pro.onrender.com/user/${parsedUser.id}/files?page=1&limit=100`);
       const data = await response.json();
       
       if (data.success) {
@@ -201,7 +201,7 @@ function DashboardHome({ setCurrentPage }: DashboardHomeProps) {
         return;
       }
 
-      const response = await fetch(`http://localhost:8080/user/${parsedUser.id}/files/${fileId}`, {
+      const response = await fetch(`https://cloudvault-pro.onrender.com/user/${parsedUser.id}/files/${fileId}`, {
         method: 'DELETE',
       });
       

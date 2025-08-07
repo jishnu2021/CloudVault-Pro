@@ -82,7 +82,7 @@ function Subscription(_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 4, , 5]);
-                        return [4 /*yield*/, fetch('http://localhost:8080/subscription/plans')];
+                        return [4 /*yield*/, fetch('https://cloudvault-pro.onrender.com/subscription/plans')];
                     case 1:
                         response = _a.sent();
                         if (!response.ok) return [3 /*break*/, 3];
@@ -114,7 +114,7 @@ function Subscription(_a) {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 5, , 6]);
-                        return [4 /*yield*/, fetch("http://localhost:8080/user/".concat(parsedUser.id, "/credits"))];
+                        return [4 /*yield*/, fetch("https://cloudvault-pro.onrender.com/user/".concat(parsedUser.id, "/credits"))];
                     case 2:
                         response = _a.sent();
                         if (!response.ok) return [3 /*break*/, 4];
@@ -153,7 +153,7 @@ function Subscription(_a) {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 4, , 5]);
-                    return [4 /*yield*/, fetch("http://localhost:8080/user/".concat(parsedUser.id, "/subscription/create-order"), {
+                    return [4 /*yield*/, fetch("https://cloudvault-pro.onrender.com/user/".concat(parsedUser.id, "/subscription/create-order"), {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -231,7 +231,7 @@ function Subscription(_a) {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 6, 7, 8]);
-                    return [4 /*yield*/, fetch("http://localhost:8080/user/".concat(parsedUser.id, "/subscription/verify-payment"), {
+                    return [4 /*yield*/, fetch("https://cloudvault-pro.onrender.com/user/".concat(parsedUser.id, "/subscription/verify-payment"), {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',

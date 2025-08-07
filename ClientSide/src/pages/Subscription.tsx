@@ -75,7 +75,7 @@ function Subscription({ userdata }: { userdata: string | null }) {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const response = await fetch('http://localhost:8080/subscription/plans');
+        const response = await fetch('https://cloudvault-pro.onrender.com/subscription/plans');
         if (response.ok) {
           const data = await response.json();
           setPlans(data.plans || []);
@@ -94,7 +94,7 @@ function Subscription({ userdata }: { userdata: string | null }) {
       if (!parsedUser) return;
       
       try {
-        const response = await fetch(`http://localhost:8080/user/${parsedUser.id}/credits`);
+        const response = await fetch(`https://cloudvault-pro.onrender.com/user/${parsedUser.id}/credits`);
         if (response.ok) {
           const data = await response.json();
           setUserCredits(data.credits || 0);
@@ -123,7 +123,7 @@ function Subscription({ userdata }: { userdata: string | null }) {
 
     try {
       // Create order
-      const orderResponse = await fetch(`http://localhost:8080/user/${parsedUser.id}/subscription/create-order`, {
+      const orderResponse = await fetch(`https://cloudvault-pro.onrender.com/user/${parsedUser.id}/subscription/create-order`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -183,7 +183,7 @@ function Subscription({ userdata }: { userdata: string | null }) {
     if (!parsedUser) return;
 
     try {
-      const verifyResponse = await fetch(`http://localhost:8080/user/${parsedUser.id}/subscription/verify-payment`, {
+      const verifyResponse = await fetch(`https://cloudvault-pro.onrender.com/user/${parsedUser.id}/subscription/verify-payment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
