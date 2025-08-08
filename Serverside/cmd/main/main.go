@@ -92,11 +92,13 @@ func main() {
 		frontendURL := os.Getenv("FRONTEND_URL")
 		if frontendURL != "" {
 			allowedOrigins = []string{frontendURL}
+			log.Printf("Using frontend URL from environment: %s", frontendURL)
 		} else {
-			// Default production origins - update these with your actual URLs
+			// Default production origins - update with actual frontend URL
 			allowedOrigins = []string{
-				"https://your-frontend-name.onrender.com",
+				"https://cloudvault-b3bf.onrender.com",
 			}
+			log.Printf("Using default frontend URL: %s", allowedOrigins[0])
 		}
 		log.Printf("Production mode - CORS allowed origins: %v", allowedOrigins)
 	} else {
@@ -114,8 +116,10 @@ func main() {
 
 	corsHandler := handlers.CORS(
 		handlers.AllowedOrigins(allowedOrigins),
-		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
-		handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}),
+		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"}),
+		handlers.AllowedHeaders([]string{"Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"}),
+		handlers.ExposedHeaders([]string{"Content-Length", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Content-Type"}),
+		handlers.MaxAge(86400),
 		handlers.AllowCredentials(),
 	)(router)
 
