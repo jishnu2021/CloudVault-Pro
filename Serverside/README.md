@@ -2,7 +2,7 @@
 
 ## CORS Configuration for Production
 
-To fix CORS issues between the frontend and backend deployments, follow these steps:
+To fix CORS issues between the frontend and backend deployments, especially for the login endpoint, follow these steps:
 
 ### 1. Environment Variables
 
@@ -45,6 +45,20 @@ If you still encounter CORS issues:
 - Check the backend logs in Render for any CORS-related messages
 - Ensure your frontend is making requests to the correct backend URL
 - Clear your browser cache and try again
+- Try using incognito/private browsing mode
+- Check that the preflight OPTIONS requests are being handled correctly
+
+### 5. Recent CORS Fixes
+
+The following improvements have been made to fix CORS issues:
+
+1. **Custom CORS Middleware**: A dedicated middleware that properly handles all CORS headers and preflight requests
+
+2. **Special Login Endpoint Handling**: The login endpoint now has special CORS handling with additional logging
+
+3. **OPTIONS Method Support**: All API routes now explicitly support the OPTIONS method for preflight requests
+
+4. **Improved Logging**: Added detailed logging for CORS-related operations to help with debugging
 
 ## Local Development
 

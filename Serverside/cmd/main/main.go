@@ -6,11 +6,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	"github.com/jishnu21/pkg/controllers"
 	"github.com/jishnu21/pkg/routes"
+	"github.com/jishnu21/pkg/utils"
 )
 
 type spaHandler struct {
@@ -21,7 +21,7 @@ type spaHandler struct {
 func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Remove the leading slash from the request path
 	requestPath := r.URL.Path
-
+  
 	// Build the file path relative to staticPath
 	filePath := filepath.Join(h.staticPath, requestPath)
 
@@ -83,45 +83,8 @@ func main() {
 		log.Println("Static file serving disabled (backend-only mode)")
 	}
 
-	// CORS configuration
-	allowedOrigins := []string{"*"}
-	environment := os.Getenv("ENVIRONMENT")
-	
-	if environment == "production" {
-		// Get frontend URL from environment variable
-		frontendURL := os.Getenv("FRONTEND_URL")
-		if frontendURL != "" {
-			allowedOrigins = []string{frontendURL}
-			log.Printf("Using frontend URL from environment: %s", frontendURL)
-		} else {
-			// Default production origins - update with actual frontend URL
-			allowedOrigins = []string{
-				"https://cloudvault-b3bf.onrender.com",
-			}
-			log.Printf("Using default frontend URL: %s", allowedOrigins[0])
-		}
-		log.Printf("Production mode - CORS allowed origins: %v", allowedOrigins)
-	} else {
-		// Development mode - allow localhost
-		allowedOrigins = []string{
-			"http://localhost:3000",
-			"http://localhost:5173", 
-			"http://localhost:5174",
-			"http://127.0.0.1:3000",
-			"http://127.0.0.1:5173",
-			"http://127.0.0.1:5174",
-		}
-		log.Printf("Development mode - CORS allowed origins: %v", allowedOrigins)
-	}
-
-	corsHandler := handlers.CORS(
-		handlers.AllowedOrigins(allowedOrigins),
-		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"}),
-		handlers.AllowedHeaders([]string{"Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"}),
-		handlers.ExposedHeaders([]string{"Content-Length", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Content-Type"}),
-		handlers.MaxAge(86400),
-		handlers.AllowCredentials(),
-	)(router)
+	// Apply our custom CORS middleware
+	corsHandler := utils.CORSMiddleware(router)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -129,9 +92,10 @@ func main() {
 	}
 
 	log.Printf("Server starting on port %s", port)
-	log.Printf("Environment: %s", environment)
+	log.Printf("Environment: %s", os.Getenv("ENVIRONMENT"))
 	
-	if err := http.ListenAndServe(":"+port, corsHandler); err != nil {
+	log.Printf("CORS middleware applied with appropriate headers")
+	if err := http.ListenAndServe(":" + port, corsHandler); err != nil {
 		log.Fatalf("Server failed to start: %v", err)
 	}
 }
