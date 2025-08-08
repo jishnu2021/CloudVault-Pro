@@ -13,6 +13,7 @@ ENVIRONMENT=production
 FRONTEND_URL=https://cloudvault-b3bf.onrender.com
 PORT=8080
 SERVE_STATIC=false
+STATIC_DIR=/path/to/static/files  # Only needed if SERVE_STATIC=true
 RAZORPAY_KEY_ID=your_razorpay_key_id
 RAZORPAY_KEY_SECRET=your_razorpay_key_secret
 ```
@@ -48,7 +49,17 @@ If you still encounter CORS issues:
 - Try using incognito/private browsing mode
 - Check that the preflight OPTIONS requests are being handled correctly
 
-### 5. Recent CORS Fixes
+### 5. Static File Serving Configuration
+
+The backend can be configured to serve static files (like the frontend build) or operate in API-only mode:
+
+- **API-Only Mode** (recommended for production): Set `SERVE_STATIC=false` in your environment variables. The backend will only serve API endpoints.
+
+- **Static File Serving Mode**: Set `SERVE_STATIC=true` and optionally set `STATIC_DIR` to the path of your static files. If `STATIC_DIR` is not set, it will default to `../../../ClientSide/dist`.
+
+For production deployments, it's recommended to use API-only mode and deploy the frontend separately.
+
+### 6. Recent CORS Fixes
 
 The following improvements have been made to fix CORS issues:
 

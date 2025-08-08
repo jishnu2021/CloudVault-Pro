@@ -1,11 +1,43 @@
-# React + TypeScript + Vite
+# CloudVault Pro Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend application for CloudVault Pro, built with React, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+## Deployment Instructions
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Local Development
+
+1. Install dependencies:
+   ```
+   npm install
+   ```
+
+2. Start the development server:
+   ```
+   npm run dev
+   ```
+
+3. The application will be available at `http://localhost:5173`
+
+### Production Deployment on Render
+
+1. Push your code to your GitHub repository
+
+2. In Render dashboard:
+   - Create a new Static Site
+   - Connect to your GitHub repository
+   - Set the build command to `npm run build`
+   - Set the publish directory to `dist`
+   - Add the environment variable: `VITE_Backend_API=https://cloudvault-pro.onrender.com`
+
+## Client-Side Routing Fix
+
+To fix the 404 errors when accessing routes directly (like `/dashboard`), we've implemented:
+
+1. A `404.html` file that redirects to the main application
+2. A script in `index.html` that handles the redirect
+3. Proper rewrite rules in `render.yaml`
+
+These changes ensure that client-side routing works correctly in production.
 
 ## Expanding the ESLint configuration
 

@@ -56,21 +56,28 @@ func main() {
 	// Register API routes first.
 	routes.UserRoutes(router)
 
-	// Determine static file path.
-	staticDir := os.Getenv("STATIC_DIR")
-	if staticDir == "" {
-		// Fallback for local development.
-		staticDir = "../../../ClientSide/dist"
+	// Check if we should serve static files
+	serveStatic := os.Getenv("SERVE_STATIC") == "true"
+	if serveStatic {
+		// Determine static file path.
+		staticDir := os.Getenv("STATIC_DIR")
+		if staticDir == "" {
+			// Fallback for local development.
+			staticDir = "../../../ClientSide/dist"
+		}
+		
+		// Verify if the static directory exists.
+		if _, err := os.Stat(staticDir); os.IsNotExist(err) {
+			log.Printf("Warning: Static directory not found at: %s. Skipping static file serving.", staticDir)
+		} else {
+			// Register SPA handler for the React application.
+			spa := spaHandler{staticPath: staticDir, indexPath: "index.html"}
+			router.PathPrefix("/").Handler(spa)
+			log.Printf("Serving static files from: %s", staticDir)
+		}
+	} else {
+		log.Println("Static file serving disabled (API-only mode)")
 	}
-	
-	// Verify if the static directory exists.
-	if _, err := os.Stat(staticDir); os.IsNotExist(err) {
-		log.Fatalf("Fatal: Static directory not found at: %s. Check STATIC_DIR env var or file path.", staticDir)
-	}
-
-	// Register SPA handler for the React application.
-	spa := spaHandler{staticPath: staticDir, indexPath: "index.html"}
-	router.PathPrefix("/").Handler(spa)
 
 	// Set up CORS.
 	c := cors.New(cors.Options{
