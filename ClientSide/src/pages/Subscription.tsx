@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { CreditCard, Star, Check } from 'lucide-react';
 
+
 declare global {
   interface Window {
     Razorpay: any;
@@ -33,6 +34,8 @@ type OrderResponse = {
 };
 
 function Subscription({ userdata }: { userdata: string | null }) {
+  const backendApi = import.meta.env.VITE_Backend_API;
+
   const [plans, setPlans] = useState<PlanType[]>([]);
   const [loading, setLoading] = useState(false);
   const [processingPlan, setProcessingPlan] = useState<string | null>(null);
@@ -74,8 +77,11 @@ function Subscription({ userdata }: { userdata: string | null }) {
   // Fetch subscription plans
   useEffect(() => {
     const fetchPlans = async () => {
+
       try {
-        const response = await fetch('https://cloudvault-pro.onrender.com/api/subscription/plans');
+        console.log(import.meta.env.Backend_API);
+
+        const response = await fetch(`${backendApi}/subscription/plans`);
         if (response.ok) {
           const data = await response.json();
           setPlans(data.plans || []);
@@ -94,7 +100,7 @@ function Subscription({ userdata }: { userdata: string | null }) {
       if (!parsedUser) return;
       
       try {
-        const response = await fetch(`https://cloudvault-pro.onrender.com/api/user/${parsedUser.id}/credits`);
+        const response = await fetch(`${backendApi}/user/${parsedUser.id}/credits`);
         if (response.ok) {
           const data = await response.json();
           setUserCredits(data.credits || 0);
@@ -123,7 +129,7 @@ function Subscription({ userdata }: { userdata: string | null }) {
 
     try {
       // Create order
-      const orderResponse = await fetch(`https://cloudvault-pro.onrender.com/api/user/${parsedUser.id}/subscription/create-order`, {
+      const orderResponse = await fetch(`${backendApi}/user/${parsedUser.id}/subscription/create-order`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -183,7 +189,7 @@ function Subscription({ userdata }: { userdata: string | null }) {
     if (!parsedUser) return;
 
     try {
-      const verifyResponse = await fetch(`https://cloudvault-pro.onrender.com/api/user/${parsedUser.id}/subscription/verify-payment`, {
+      const verifyResponse = await fetch(`${backendApi}/user/${parsedUser.id}/subscription/verify-payment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

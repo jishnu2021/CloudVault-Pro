@@ -38,6 +38,7 @@ interface PaginationState {
 }
 
 function Transactions({ userval }: { userval: string | null }) {
+  const VITE_Backend_API = import.meta.env.VITE_Backend_API;
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -70,7 +71,7 @@ function Transactions({ userval }: { userval: string | null }) {
     try {
       setLoading(true);
       const response = await fetch(
-        `https://cloudvault-pro.onrender.com/api/user/${parsedUser.id}/transactions?limit=${pagination.limit}&offset=${pagination.offset}`
+        `${VITE_Backend_API}/user/${parsedUser.id}/transactions?limit=${pagination.limit}&offset=${pagination.offset}`
       );
       
       if (!response.ok) {

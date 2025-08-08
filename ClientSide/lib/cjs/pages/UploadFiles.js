@@ -95,7 +95,7 @@ function UploadFiles(_a) {
                 case 0:
                     _a.trys.push([0, 3, 4, 5]);
                     setLoading(true);
-                    return [4 /*yield*/, fetch("https://cloudvault-pro.onrender.com/api/user/".concat(parsedUser.id, "/files?page=1&limit=50"))];
+                    return [4 /*yield*/, fetch("http://localhost:8080/user/".concat(parsedUser.id, "/files?page=1&limit=50"))];
                 case 1:
                     response = _a.sent();
                     return [4 /*yield*/, response.json()];
@@ -129,7 +129,7 @@ function UploadFiles(_a) {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 5, , 6]);
-                    return [4 /*yield*/, fetch("https://cloudvault-pro.onrender.com/api/user/".concat(parsedUser.id, "/credits"))];
+                    return [4 /*yield*/, fetch("http://localhost:8080/user/".concat(parsedUser.id, "/credits"))];
                 case 2:
                     response = _a.sent();
                     if (!response.ok) return [3 /*break*/, 4];
@@ -191,7 +191,7 @@ function UploadFiles(_a) {
                         xhr_1.addEventListener('error', function () {
                             reject(new Error('Network error'));
                         });
-                        xhr_1.open('POST', "https://cloudvault-pro.onrender.com/api/user/".concat(parsedUser.id, "/upload"));
+                        xhr_1.open('POST', "http://localhost:8080/user/".concat(parsedUser.id, "/upload"));
                         xhr_1.send(formData);
                     })];
             }
@@ -279,7 +279,7 @@ function UploadFiles(_a) {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 4, , 5]);
-                    return [4 /*yield*/, fetch("https://cloudvault-pro.onrender.com/api/user/".concat(parsedUser.id, "/files/").concat(fileId), {
+                    return [4 /*yield*/, fetch("http://localhost:8080/user/".concat(parsedUser.id, "/files/").concat(fileId), {
                             method: 'DELETE',
                         })];
                 case 2:

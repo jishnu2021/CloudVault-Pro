@@ -8,6 +8,7 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 	"github.com/jishnu21/pkg/controllers"
 	"github.com/jishnu21/pkg/routes"
 )
@@ -37,33 +38,85 @@ func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	razorpayKeyID := "rzp_test_1mUU1xAnklgEiv"
-	razorpayKeySecret := "OMlIMJXtfzohZlzFQbwJpn1D"
+	// Load environment variables from .env file (for local development)
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found (this is normal in production)")
+	}
 
+	// Get Razorpay credentials from environment variables
+	razorpayKeyID := os.Getenv("RAZORPAY_KEY_ID")
+	razorpayKeySecret := os.Getenv("RAZORPAY_KEY_SECRET")
+
+	// Check if credentials are provided
 	if razorpayKeyID == "" || razorpayKeySecret == "" {
-		log.Fatal("Razorpay credentials not found in environment variables")
+		log.Fatal("Razorpay credentials not found in environment variables. Please set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET")
 	}
 
 	controllers.InitRazorpay(razorpayKeyID, razorpayKeySecret)
 
 	router := mux.NewRouter()
 
-	// API routes under /api
-	apiRouter := router.PathPrefix("/api").Subrouter()
-	routes.UserRoutes(apiRouter)
+	// Health check endpoint for Render
+	router.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Backend is healthy"))
+	}).Methods("GET")
 
-	// Path to built frontend
-	staticDir := "../../../ClientSide/dist"
+	// API routes
+	routes.UserRoutes(router)
 
-	// SPA handler for all other routes
-	spa := spaHandler{staticPath: staticDir, indexPath: "index.html"}
-	router.PathPrefix("/").Handler(spa)
+	// Only serve static files if SERVE_STATIC is true and static directory exists
+	serveStatic := os.Getenv("SERVE_STATIC") == "true"
+	if serveStatic {
+		staticDir := "../../../ClientSide/dist"
+		
+		// Check if static directory exists
+		if _, err := os.Stat(staticDir); os.IsNotExist(err) {
+			log.Printf("Warning: Static directory does not exist: %s (skipping static file serving)", staticDir)
+		} else {
+			// SPA handler for all other routes
+			spa := spaHandler{staticPath: staticDir, indexPath: "index.html"}
+			router.PathPrefix("/").Handler(spa)
+			log.Printf("Static files served from: %s", staticDir)
+		}
+	} else {
+		log.Println("Static file serving disabled (backend-only mode)")
+	}
 
-	// CORS config
+	// CORS configuration
+	allowedOrigins := []string{"*"}
+	environment := os.Getenv("ENVIRONMENT")
+	
+	if environment == "production" {
+		// Get frontend URL from environment variable
+		frontendURL := os.Getenv("FRONTEND_URL")
+		if frontendURL != "" {
+			allowedOrigins = []string{frontendURL}
+		} else {
+			// Default production origins - update these with your actual URLs
+			allowedOrigins = []string{
+				"https://your-frontend-name.onrender.com",
+			}
+		}
+		log.Printf("Production mode - CORS allowed origins: %v", allowedOrigins)
+	} else {
+		// Development mode - allow localhost
+		allowedOrigins = []string{
+			"http://localhost:3000",
+			"http://localhost:5173", 
+			"http://localhost:5174",
+			"http://127.0.0.1:3000",
+			"http://127.0.0.1:5173",
+			"http://127.0.0.1:5174",
+		}
+		log.Printf("Development mode - CORS allowed origins: %v", allowedOrigins)
+	}
+
 	corsHandler := handlers.CORS(
-		handlers.AllowedOrigins([]string{"*"}),
+		handlers.AllowedOrigins(allowedOrigins),
 		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
 		handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}),
+		handlers.AllowCredentials(),
 	)(router)
 
 	port := os.Getenv("PORT")
@@ -71,6 +124,10 @@ func main() {
 		port = "8080"
 	}
 
-	log.Printf("Server starting on :%s", port)
-	log.Fatal(http.ListenAndServe(":"+port, corsHandler))
+	log.Printf("Server starting on port %s", port)
+	log.Printf("Environment: %s", environment)
+	
+	if err := http.ListenAndServe(":"+port, corsHandler); err != nil {
+		log.Fatalf("Server failed to start: %v", err)
+	}
 }

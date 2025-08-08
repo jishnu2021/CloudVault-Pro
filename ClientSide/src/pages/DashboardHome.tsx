@@ -32,6 +32,7 @@ interface DashboardStats {
 }
 
 function DashboardHome({ setCurrentPage }: DashboardHomeProps) {
+  const VITE_Backend_API = import.meta.env.VITE_Backend_API;
   const [files, setFiles] = useState<FileData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -79,7 +80,7 @@ function DashboardHome({ setCurrentPage }: DashboardHomeProps) {
       }
 
       setLoading(true);
-      const response = await fetch(`https://cloudvault-pro.onrender.com/api/user/${parsedUser.id}/files?page=1&limit=100`);
+      const response = await fetch(`${VITE_Backend_API}/user/${parsedUser.id}/files?page=1&limit=100`);
       const data = await response.json();
       
       if (data.success) {
@@ -201,7 +202,7 @@ function DashboardHome({ setCurrentPage }: DashboardHomeProps) {
         return;
       }
 
-      const response = await fetch(`https://cloudvault-pro.onrender.com/api/user/${parsedUser.id}/files/${fileId}`, {
+      const response = await fetch(`${VITE_Backend_API}/user/${parsedUser.id}/files/${fileId}`, {
         method: 'DELETE',
       });
       
