@@ -1,22 +1,17 @@
 import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import DashboardHome from '../pages/DashboardHome';
 import UploadFiles from '../pages/UploadFiles';
 import Transactions from '../pages/Transaction';
 import Subscription from '../pages/Subscription';
 
-
 function Dashboard({ user }: { user: string | null }) {
-  const [currentPage, setCurrentPage] = useState('dashboard');
+  const [currentPage, setCurrentPage] = useState('dashboard')
 
-  // parse once, memoize to avoid repeated JSON.parse on rerenders
-  // const parsedUser = useMemo<UserType | null>(() => {
-  //   if (!user) return null;
-  //   try {
-  //     return JSON.parse(user);
-  //   } catch {
-  //     return null;
-  //   }
-  // }, [user]);
+  // Redirect to home if user is not logged in
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
 
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: '🏠' },
@@ -25,21 +20,20 @@ function Dashboard({ user }: { user: string | null }) {
     { id: 'subscription', label: 'Subscription', icon: '⭐' }
   ];
 
-const renderPage = () => {
-  switch (currentPage) {
-    case 'dashboard':
-      return <DashboardHome setCurrentPage={setCurrentPage} />;
-    case 'upload':
-      return <UploadFiles userval={user} />;
-    case 'transactions':
-      return <Transactions userval = {user} />;
-    case 'subscription':
-      return <Subscription userdata={user} />;
-    default:
-      return <DashboardHome setCurrentPage={setCurrentPage} />;
-  }
-};
-
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'dashboard':
+        return <DashboardHome setCurrentPage={setCurrentPage} />;
+      case 'upload':
+        return <UploadFiles userval={user} />;
+      case 'transactions':
+        return <Transactions userval={user} />;
+      case 'subscription':
+        return <Subscription userdata={user} />;
+      default:
+        return <DashboardHome setCurrentPage={setCurrentPage} />;
+    }
+  };
 
   return (
     <div className="drawer lg:drawer-open">
@@ -84,7 +78,6 @@ const renderPage = () => {
                 </li>
               ))}
             </ul>
-
           </div>
         </aside>
       </div>
