@@ -9,8 +9,10 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/razorpay/razorpay-go v1.4.0
 	gorm.io/driver/mysql v1.6.0
+	gorm.io/driver/postgres v1.7.2
 	gorm.io/gorm v1.30.1
 )
+
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
