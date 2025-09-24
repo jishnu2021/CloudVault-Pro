@@ -1,20 +1,27 @@
 package config
 
 import (
+	"log"
+	"os"
+
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"gorm.io/driver/mysql"
 )
 
 var DB *gorm.DB
 
 func ConnectDB() {
-	dsn := "root:OqqvlUbxmyiwlYkzBfGmXocopsFjSbYf@tcp(trolley.proxy.rlwy.net:36587)/railway?charset=utf8mb4&parseTime=True&loc=Local"
+	// Use the Internal Database URL from Render
+	// Example: postgresql://user:password@host:5432/dbname
+	dsn := os.Getenv("DATABASE_URL")
 
 	var err error
-	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("Failed to connect to database: " + err.Error())
+		log.Fatal("❌ Failed to connect to database:", err)
 	}
+
+	log.Println("✅ Database connected successfully")
 }
 
 func GetDB() *gorm.DB {
