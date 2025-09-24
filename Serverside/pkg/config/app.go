@@ -13,7 +13,7 @@ var DB *gorm.DB
 func ConnectDB() {
 	// Use the Internal Database URL from Render
 	// Example: postgresql://user:password@host:5432/dbname
-	dsn := os.Getenv("DATABASE_URL")
+	dsn := "postgresql://clouddatabase_1moh_user:WEGp588jC2UEK6RFi5mo5mZ7mjx5Kl0g@dpg-d39qc93e5dus73bm99c0-a/clouddatabase_1moh"
 
 	var err error
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
